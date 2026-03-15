@@ -22,6 +22,7 @@ class AuthController extends Controller
             'name' => $request->string('name')->toString(),
             'email' => $request->string('email')->toString(),
             'password' => $request->string('password')->toString(),
+            'role' => User::ROLE_STUDENT,
         ]);
 
         Auth::login($user);
@@ -47,6 +48,8 @@ class AuthController extends Controller
                 ->withInput($request->except('password'))
                 ->with('error', 'Email atau password salah.');
         }
+
+        Auth::user()->update(['last_login_at' => now()]);
 
         $request->session()->regenerate();
 

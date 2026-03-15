@@ -1,0 +1,61 @@
+:root {
+    --bs-primary: #2563eb;
+    --bs-primary-rgb: 37, 99, 235;
+    --bs-body-font-family: 'Fira Sans', sans-serif;
+    --bs-body-bg: #f1f5f9;
+    --bs-body-color: #1e293b;
+    --app-nav-bg: #0f172a;
+    --app-nav-border: #1e293b;
+    --app-accent: #2563eb;
+    --app-accent-strong: #1d4ed8;
+    --app-surface: #ffffff;
+    --app-border: #e2e8f0;
+    --app-border-strong: #cbd5e1;
+    --app-soft: #f8fafc;
+    --app-soft-alt: #f1f5f9;
+    --app-text: #0f172a;
+    --app-text-body: #1e293b;
+    --app-muted: #64748b;
+    --app-muted-soft: #94a3b8;
+    --app-success: #16a34a;
+    --app-success-bg: #dcfce7;
+    --app-danger: #dc2626;
+    --app-danger-bg: #fee2e2;
+    --app-warning: #d97706;
+    --app-warning-bg: #fef3c7;
+    --app-violet: #7c3aed;
+    --app-violet-bg: #ede9fe;
+    --app-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+}
+
+body {
+    font-family: 'Fira Sans', sans-serif;
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    color: var(--app-accent);
+}
+
+a:hover {
+    color: var(--app-accent-strong);
+}
+
+.btn-primary {
+    background-color: var(--app-accent);
+    border-color: var(--app-accent);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--app-accent-strong);
+    border-color: var(--app-accent-strong);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--app-accent);
+    box-shadow: 0 0 0 3px rgba(var(--bs-primary-rgb), 0.12);
+}

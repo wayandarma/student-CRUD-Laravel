@@ -1,0 +1,148 @@
+.student-portal-page {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.student-portal-page .portal-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 1rem;
+}
+
+.student-portal-page .portal-hero-card,
+.student-portal-page .portal-role-card,
+.student-portal-page .portal-card,
+.student-portal-page .portal-empty {
+    background: #ffffff;
+    border: 1px solid var(--app-border);
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+}
+
+.student-portal-page .portal-hero-card {
+    padding: 1.75rem;
+    background:
+        radial-gradient(circle at top right, rgba(37, 99, 235, 0.16), transparent 36%),
+        linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+}
+
+.student-portal-page .portal-eyebrow {
+    margin: 0 0 0.5rem;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.78rem;
+    color: var(--app-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.student-portal-page .portal-title {
+    margin: 0;
+    font-family: 'Fira Code', monospace;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    letter-spacing: -0.04em;
+    color: var(--app-text);
+}
+
+.student-portal-page .portal-subtitle {
+    margin: 0.8rem 0 0;
+    color: var(--app-muted);
+    line-height: 1.7;
+    max-width: 56ch;
+}
+
+.student-portal-page .portal-role-card {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+    background: linear-gradient(180deg, #0f172a 0%, #111c34 100%);
+    color: #e2e8f0;
+}
+
+.student-portal-page .portal-role-label {
+    margin: 0;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #94a3b8;
+}
+
+.student-portal-page .portal-role-email {
+    margin: 0.8rem 0 0;
+    color: #cbd5e1;
+    word-break: break-word;
+}
+
+.student-portal-page .portal-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.student-portal-page .portal-card {
+    padding: 1.35rem;
+}
+
+.student-portal-page .portal-card-label {
+    margin: 0 0 0.55rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--app-muted-soft);
+}
+
+.student-portal-page .portal-card-title {
+    margin: 0;
+    font-size: 1.05rem;
+    color: var(--app-text);
+}
+
+.student-portal-page .portal-card-meta {
+    margin: 0.55rem 0 0;
+    color: var(--app-muted);
+    line-height: 1.6;
+}
+
+.student-portal-page .portal-status {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 0.28rem 0.7rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.student-portal-page .portal-status--active {
+    background: var(--app-success-bg);
+    color: #15803d;
+}
+
+.student-portal-page .portal-status--inactive {
+    background: var(--app-danger-bg);
+    color: #b91c1c;
+}
+
+.student-portal-page .portal-empty {
+    padding: 1.65rem;
+}
+
+.student-portal-page .portal-empty-title {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--app-text);
+}
+
+.student-portal-page .portal-empty-text {
+    margin: 0.7rem 0 0;
+    color: var(--app-muted);
+    line-height: 1.7;
+}
+
+@media (max-width: 991px) {
+    .student-portal-page .portal-hero,
+    .student-portal-page .portal-grid {
+        grid-template-columns: 1fr;
+    }
+}
