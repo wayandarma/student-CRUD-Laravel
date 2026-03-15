@@ -1,0 +1,231 @@
+@extends('layouts.app')
+
+@section('content')
+
+<style>
+    .form-card {
+        background: #fff;
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
+        overflow: hidden;
+        max-width: 640px;
+        margin: 0 auto;
+    }
+
+    .form-card-header {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid #F1F5F9;
+        background: #FAFAFA;
+    }
+
+    .form-card-title {
+        font-family: 'Fira Code', monospace;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: #0F172A;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .form-card-body {
+        padding: 1.75rem 1.5rem;
+    }
+
+    .form-label {
+        font-size: 0.8125rem;
+        font-weight: 500;
+        color: #374151;
+        margin-bottom: 0.375rem;
+    }
+
+    .form-label .required {
+        color: #DC2626;
+        margin-left: 2px;
+    }
+
+    .form-control, .form-select {
+        font-size: 0.875rem;
+        border: 1px solid #D1D5DB;
+        border-radius: 7px;
+        padding: 0.5rem 0.75rem;
+        color: #1E293B;
+        transition: border-color 150ms ease, box-shadow 150ms ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #2563EB;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        outline: none;
+    }
+
+    .form-control.is-invalid, .form-select.is-invalid {
+        border-color: #DC2626;
+    }
+
+    .invalid-feedback {
+        font-size: 0.75rem;
+        color: #DC2626;
+        margin-top: 0.25rem;
+    }
+
+    .form-card-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid #F1F5F9;
+        background: #FAFAFA;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+    }
+
+    .btn-submit {
+        background: #2563EB;
+        color: white;
+        border: none;
+        border-radius: 7px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        padding: 0.5rem 1.25rem;
+        cursor: pointer;
+        transition: background 150ms ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+    }
+    .btn-submit:hover { background: #1D4ED8; }
+
+    .btn-cancel {
+        color: #64748B;
+        font-size: 0.875rem;
+        text-decoration: none;
+        padding: 0.5rem 0.75rem;
+        border-radius: 7px;
+        border: 1px solid #E2E8F0;
+        transition: all 150ms ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+    }
+    .btn-cancel:hover { background: #F1F5F9; color: #1E293B; }
+</style>
+
+<div class="form-card">
+    <div class="form-card-header">
+        <h1 class="form-card-title">
+            <i class="bi bi-person-plus" style="color:#2563EB;"></i>
+            Tambah Mahasiswa
+        </h1>
+    </div>
+
+    <form action="{{ route('students.store') }}" method="POST" novalidate>
+        @csrf
+        <div class="form-card-body">
+            <div class="row g-3">
+
+                <div class="col-12">
+                    <label for="name" class="form-label">
+                        Nama Lengkap <span class="required">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value="{{ old('name') }}"
+                        class="form-control @error('name') is-invalid @enderror"
+                        placeholder="Masukkan nama lengkap"
+                        autocomplete="name"
+                    >
+                    @error('name')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="col-12">
+                    <label for="email" class="form-label">
+                        Email <span class="required">*</span>
+                    </label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value="{{ old('email') }}"
+                        class="form-control @error('email') is-invalid @enderror"
+                        placeholder="mahasiswa@example.com"
+                        autocomplete="email"
+                    >
+                    @error('email')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="col-md-6">
+                    <label for="major" class="form-label">
+                        Jurusan <span class="required">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        id="major"
+                        name="major"
+                        value="{{ old('major') }}"
+                        class="form-control @error('major') is-invalid @enderror"
+                        placeholder="cth. Teknik Informatika"
+                    >
+                    @error('major')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="col-md-6">
+                    <label for="enrollment_year" class="form-label">
+                        Tahun Masuk <span class="required">*</span>
+                    </label>
+                    <input
+                        type="number"
+                        id="enrollment_year"
+                        name="enrollment_year"
+                        value="{{ old('enrollment_year') }}"
+                        class="form-control @error('enrollment_year') is-invalid @enderror"
+                        placeholder="{{ now()->year }}"
+                        min="2000"
+                        max="{{ now()->year }}"
+                    >
+                    @error('enrollment_year')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="col-12">
+                    <label for="status" class="form-label">
+                        Status <span class="required">*</span>
+                    </label>
+                    <select
+                        id="status"
+                        name="status"
+                        class="form-select @error('status') is-invalid @enderror"
+                    >
+                        <option value="" disabled {{ old('status') ? '' : 'selected' }}>Pilih status</option>
+                        <option value="active"   {{ old('status') === 'active'   ? 'selected' : '' }}>Aktif</option>
+                        <option value="inactive" {{ old('status') === 'inactive' ? 'selected' : '' }}>Tidak Aktif</option>
+                    </select>
+                    @error('status')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+            </div>
+        </div>
+
+        <div class="form-card-footer">
+            <a href="{{ route('students.index') }}" class="btn-cancel">
+                <i class="bi bi-arrow-left"></i> Kembali
+            </a>
+            <button type="submit" class="btn-submit">
+                <i class="bi bi-check-lg"></i> Simpan Data
+            </button>
+        </div>
+    </form>
+</div>
+
+@endsection
