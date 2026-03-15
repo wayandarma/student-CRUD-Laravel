@@ -135,17 +135,19 @@
                                             <i class="bi bi-pencil" aria-hidden="true"></i>
                                         </a>
 
-                                        <form action="{{ route('students.destroy', $student) }}" method="POST" data-confirm
-                                            data-confirm-title="Hapus mahasiswa?"
-                                            data-confirm-text="Hapus data {{ $student->name }}? Tindakan ini tidak dapat dibatalkan."
-                                            data-confirm-confirm-text="Ya, hapus" data-confirm-variant="danger">
+                                        @can('delete', $student)
+                                        <form action="{{ route('students.destroy', $student) }}" method="POST"
+                                              data-confirm
+                                              data-confirm-title="Hapus Mahasiswa"
+                                              data-confirm-body="Yakin ingin menghapus data {{ $student->name }}? Tindakan ini tidak dapat dibatalkan."
+                                              data-confirm-variant="danger">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn-action btn-action--danger" title="Hapus"
-                                                aria-label="Hapus {{ $student->name }}">
-                                                <i class="bi bi-trash3" aria-hidden="true"></i>
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash"></i>
                                             </button>
                                         </form>
+                                        @endcan
                                     </div>
                                 </td>
                             </tr>

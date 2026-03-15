@@ -22,6 +22,11 @@
     </section>
 
     @if ($studentProfile)
+        <div class="mb-3">
+            <a href="{{ route('profile.edit') }}" class="btn btn-sm btn-outline-primary">
+                <i class="bi bi-pencil me-1"></i> Edit Profil
+            </a>
+        </div>
         <section class="portal-grid">
             <article class="portal-card">
                 <p class="portal-card-label">Nama</p>
@@ -46,13 +51,13 @@
             </article>
         </section>
     @else
-        <section class="portal-empty">
-            <h2 class="portal-empty-title">Profil mahasiswa belum terhubung</h2>
-            <p class="portal-empty-text">
-                Akun mahasiswa Anda sudah aktif, tetapi belum ada data profil mahasiswa yang dikaitkan. Hubungi admin
-                agar akun ini dapat ditautkan ke data akademik Anda.
-            </p>
-        </section>
+        <div class="text-center py-5">
+            <i class="bi bi-person-circle display-4 text-muted mb-3 d-block"></i>
+            <p class="text-muted mb-3">Profil akademikmu belum dibuat.</p>
+            <a href="{{ route('profile.edit') }}" class="btn btn-primary">
+                <i class="bi bi-plus-lg me-1"></i> Buat Profil
+            </a>
+        </div>
     @endif
 </div>
 @endsection
