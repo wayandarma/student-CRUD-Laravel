@@ -49,6 +49,8 @@ class AuthController extends Controller
                 ->with('error', 'Email atau password salah.');
         }
 
+        Auth::user()->update(['last_login_at' => now()]);
+
         $request->session()->regenerate();
 
         return redirect()
