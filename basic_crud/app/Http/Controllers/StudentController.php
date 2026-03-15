@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StudentStoreRequest;
 use App\Http\Requests\StudentUpdateRequest;
 use App\Models\Student;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -13,21 +14,41 @@ class StudentController extends Controller
 {
     public function index(Request $request): View
     {
-        $students = Student::query()
-            ->when($request->filled('search'), function ($query) use ($request) {
-                $search = $request->string('search');
-                $query->where('name', 'like', "%{$search}%")
-                      ->orWhere('email', 'like', "%{$search}%");
+        $search = trim((string) $request->input('search', ''));
+        $status = $request->string('status')->toString();
+        $major = $request->string('major')->toString();
+
+        $studentQuery = Student::query()
+            ->when($search !== '', function (Builder $query) use ($search): void {
+                $query->where(function (Builder $searchQuery) use ($search): void {
+                    $searchQuery
+                        ->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                });
             })
-            ->when($request->filled('status'), fn ($q) => $q->where('status', $request->string('status')))
-            ->when($request->filled('major'),  fn ($q) => $q->where('major', $request->string('major')))
-            ->latest()
+            ->when($status !== '', fn (Builder $query) => $query->where('status', $status))
+            ->when($major !== '', fn (Builder $query) => $query->where('major', $major))
+            ->latest();
+
+        $students = (clone $studentQuery)
             ->paginate(15)
             ->withQueryString();
 
-        $majors = Student::distinct()->orderBy('major')->pluck('major')->filter()->values();
+        $majors = Student::query()
+            ->whereNotNull('major')
+            ->orderBy('major')
+            ->distinct()
+            ->pluck('major')
+            ->values();
 
-        return view('dashboard', compact('students', 'majors'));
+        $stats = [
+            'total' => Student::query()->count(),
+            'active' => Student::query()->where('status', 'active')->count(),
+            'inactive' => Student::query()->where('status', 'inactive')->count(),
+            'majors' => Student::query()->whereNotNull('major')->distinct()->count('major'),
+        ];
+
+        return view('dashboard', compact('students', 'majors', 'stats'));
     }
 
     public function create(): View

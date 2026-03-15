@@ -22,6 +22,7 @@ class AuthController extends Controller
             'name' => $request->string('name')->toString(),
             'email' => $request->string('email')->toString(),
             'password' => $request->string('password')->toString(),
+            'role' => User::ROLE_STUDENT,
         ]);
 
         Auth::login($user);

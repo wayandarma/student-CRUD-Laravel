@@ -18,6 +18,7 @@ class StudentFactory extends Factory
     public function definition(): array
     {
         return [
+            'user_id' => null,
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'major' => fake()->randomElement([

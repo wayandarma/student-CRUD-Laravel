@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,13 +14,17 @@ Route::middleware('guest')->group(function (): void {
 });
 
 Route::middleware('auth')->group(function (): void {
-    Route::get('/dashboard', fn () => redirect()->route('students.index'))->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('students', StudentController::class);
+    Route::middleware('role:super_admin,admin')->group(function (): void {
+        Route::resource('students', StudentController::class)->except('show');
+    });
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
 Route::get('/', function () {
-    return redirect()->route('login');
+    return auth()->check()
+        ? redirect()->route('dashboard')
+        : redirect()->route('login');
 });
