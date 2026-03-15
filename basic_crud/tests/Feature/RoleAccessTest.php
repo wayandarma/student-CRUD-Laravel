@@ -47,4 +47,14 @@ class RoleAccessTest extends TestCase
         $response->assertOk();
         $response->assertSee('Portal Mahasiswa');
     }
+
+    public function test_admin_cannot_delete_a_student(): void
+    {
+        $admin   = User::factory()->admin()->create();
+        $student = \App\Models\Student::factory()->create();
+
+        $response = $this->actingAs($admin)->delete(route('students.destroy', $student));
+
+        $response->assertForbidden();
+    }
 }

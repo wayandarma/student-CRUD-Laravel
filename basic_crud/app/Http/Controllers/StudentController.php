@@ -14,9 +14,11 @@ class StudentController extends Controller
 {
     public function index(Request $request): View
     {
+        $this->authorize('viewAny', Student::class);
+
         $search = trim((string) $request->input('search', ''));
         $status = $request->string('status')->toString();
-        $major = $request->string('major')->toString();
+        $major  = $request->string('major')->toString();
 
         $studentQuery = Student::query()
             ->when($search !== '', function (Builder $query) use ($search): void {
@@ -42,10 +44,10 @@ class StudentController extends Controller
             ->values();
 
         $stats = [
-            'total' => Student::query()->count(),
-            'active' => Student::query()->where('status', 'active')->count(),
+            'total'    => Student::query()->count(),
+            'active'   => Student::query()->where('status', 'active')->count(),
             'inactive' => Student::query()->where('status', 'inactive')->count(),
-            'majors' => Student::query()->whereNotNull('major')->distinct()->count('major'),
+            'majors'   => Student::query()->whereNotNull('major')->distinct()->count('major'),
         ];
 
         return view('dashboard', compact('students', 'majors', 'stats'));
@@ -53,11 +55,15 @@ class StudentController extends Controller
 
     public function create(): View
     {
+        $this->authorize('create', Student::class);
+
         return view('students.create');
     }
 
     public function store(StudentStoreRequest $request): RedirectResponse
     {
+        $this->authorize('create', Student::class);
+
         Student::query()->create($request->validated());
 
         return redirect()
@@ -67,16 +73,22 @@ class StudentController extends Controller
 
     public function show(Student $student): View
     {
+        $this->authorize('view', $student);
+
         return view('students.show', compact('student'));
     }
 
     public function edit(Student $student): View
     {
+        $this->authorize('update', $student);
+
         return view('students.edit', compact('student'));
     }
 
     public function update(StudentUpdateRequest $request, Student $student): RedirectResponse
     {
+        $this->authorize('update', $student);
+
         $student->update($request->validated());
 
         return redirect()
@@ -86,6 +98,8 @@ class StudentController extends Controller
 
     public function destroy(Student $student): RedirectResponse
     {
+        $this->authorize('delete', $student);
+
         $student->delete();
 
         return redirect()
