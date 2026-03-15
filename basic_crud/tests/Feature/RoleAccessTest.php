@@ -57,4 +57,93 @@ class RoleAccessTest extends TestCase
 
         $response->assertForbidden();
     }
+
+    // -- Profile routes ---------------------------------------------------
+
+    public function test_student_can_access_profile_show_redirects_to_edit_when_no_profile(): void
+    {
+        $student = User::factory()->student()->create();
+
+        $response = $this->actingAs($student)->get(route('profile.show'));
+
+        // No profile linked → StudentProfileController@show redirects to profile.edit
+        $response->assertRedirect(route('profile.edit'));
+    }
+
+    public function test_student_can_access_profile_edit(): void
+    {
+        $student = User::factory()->student()->create();
+
+        $response = $this->actingAs($student)->get(route('profile.edit'));
+
+        $response->assertOk();
+    }
+
+    public function test_admin_cannot_access_profile_routes(): void
+    {
+        $admin = User::factory()->admin()->create();
+
+        $response = $this->actingAs($admin)->get(route('profile.show'));
+
+        // role:student middleware → redirects to dashboard
+        $response->assertRedirect(route('dashboard'));
+        $response->assertSessionHas('error');
+    }
+
+    // -- User management --------------------------------------------------
+
+    public function test_super_admin_can_access_user_management(): void
+    {
+        $superAdmin = User::factory()->superAdmin()->create();
+
+        $response = $this->actingAs($superAdmin)->get(route('users.index'));
+
+        $response->assertOk();
+    }
+
+    public function test_admin_cannot_access_user_management(): void
+    {
+        $admin = User::factory()->admin()->create();
+
+        $response = $this->actingAs($admin)->get(route('users.index'));
+
+        // role:super_admin middleware → redirects to dashboard
+        $response->assertRedirect(route('dashboard'));
+        $response->assertSessionHas('error');
+    }
+
+    public function test_super_admin_can_change_student_role_to_admin(): void
+    {
+        $superAdmin = User::factory()->superAdmin()->create();
+        $target     = User::factory()->student()->create();
+
+        $response = $this->actingAs($superAdmin)
+            ->put(route('users.update-role', $target), ['role' => 'admin']);
+
+        $response->assertRedirect(route('users.index'));
+        $this->assertDatabaseHas('users', ['id' => $target->id, 'role' => 'admin']);
+    }
+
+    public function test_super_admin_cannot_change_another_super_admins_role(): void
+    {
+        $superAdmin = User::factory()->superAdmin()->create();
+        $target     = User::factory()->superAdmin()->create();
+
+        $response = $this->actingAs($superAdmin)
+            ->put(route('users.update-role', $target), ['role' => 'admin']);
+
+        $response->assertForbidden();
+    }
+
+    // -- students.show ----------------------------------------------------
+
+    public function test_admin_can_access_students_show(): void
+    {
+        $admin   = User::factory()->admin()->create();
+        $student = \App\Models\Student::factory()->create();
+
+        $response = $this->actingAs($admin)->get(route('students.show', $student));
+
+        $response->assertOk();
+    }
 }
