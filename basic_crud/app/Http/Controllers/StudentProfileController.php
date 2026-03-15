@@ -33,10 +33,36 @@ class StudentProfileController extends Controller
 
     public function store(StudentProfileStoreRequest $request): RedirectResponse
     {
+        // Already has a linked profile
         if (Student::query()->where('user_id', auth()->id())->exists()) {
             return redirect()
                 ->route('profile.show')
                 ->with('info', 'Profil kamu sudah ada.');
+        }
+
+        // Admin may have pre-created a record with this email (user_id is null)
+        // Auto-link it and update with the submitted data
+        $existing = Student::query()
+            ->where('email', auth()->user()->email)
+            ->whereNull('user_id')
+            ->first();
+
+        if ($existing !== null) {
+            $existing->update([
+                ...$request->validated(),
+                'user_id' => auth()->id(),
+            ]);
+
+            return redirect()
+                ->route('profile.show')
+                ->with('success', 'Profil berhasil dihubungkan ke akun kamu.');
+        }
+
+        // Email is already linked to another user's student record
+        if (Student::query()->where('email', auth()->user()->email)->exists()) {
+            return redirect()
+                ->back()
+                ->with('error', 'Email ini sudah digunakan oleh data mahasiswa lain. Hubungi admin.');
         }
 
         Student::query()->create([

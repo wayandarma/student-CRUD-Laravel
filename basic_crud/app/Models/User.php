@@ -69,7 +69,7 @@ class User extends Authenticatable
 
     public function hasAnyRole(array $roles): bool
     {
-        return in_array($this->role, $roles, true);
+        return \in_array($this->role, $roles, true);
     }
 
     public function isSuperAdmin(): bool
